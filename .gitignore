@@ -1,0 +1,6 @@
+bin/*
+external/*
+createdData/*
+data/*
+data-preprocessed/*
+target/*
