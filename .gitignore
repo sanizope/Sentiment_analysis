@@ -4,3 +4,5 @@ createdData/*
 data/*
 data-preprocessed/*
 target/*
+food/found/*
+food/not_found/*

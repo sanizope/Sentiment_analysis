@@ -46,4 +46,12 @@ public class TaggedSentence {
 		return this.sentence;
 	}
 
+	/**
+	 * returns true if posTag refers to any type of noun, false otherwise
+	 * @param posTag
+	 * @return
+	 */
+	public static boolean isNoun(String posTag){
+		return posTag.startsWith("NN");
+	}
 }

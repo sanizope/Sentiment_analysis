@@ -10,8 +10,6 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
-import contentAnalysis.Restaurant;
-import contentAnalysis.Review;
 
 
 public class AspectBasedSentimentAnalysis {
@@ -51,14 +49,20 @@ public class AspectBasedSentimentAnalysis {
 		logActivity("Spellcorrected reviews");
 		absa.tagReviews();
 		logActivity("Tagged sentences of reviews");
-		Review.clearNounfrequencies();
-		absa.saveNounList();
+		//Review.clearNounfrequencies();
+		Review.saveNounList();
 		logActivity("Saved nounlist");
-		absa.saveReviews();
-		HashSet<String> foods = absa.readCsvFoodList();
+		HashSet<String> foods = absa.getFoodList();
 		logActivity("read csv food name list");
-		absa.replaceFoods(foods);
+		absa.replaceWordByCategoryInReviews("food", foods);
 		logActivity("replace food name with food");
+		HashSet<String> service = absa.getServiceList();
+		absa.replaceWordByCategoryInReviews("service", service);
+		logActivity("replace service synonyms with service");
+		HashSet<String> priceValue = absa.getPriceValueList();
+		absa.replaceWordByCategoryInReviews("price_value", priceValue);
+		logActivity("replace price/value synonyms with price_value");
+		absa.saveReviews();
 		System.out.println("Finished");
 
 	}
@@ -79,6 +83,12 @@ public class AspectBasedSentimentAnalysis {
 		}
 	}
 	
+	public void replaceWordByCategoryInReviews(String category, HashSet<String> wordlist){
+		for(Restaurant restaurant:restaurants) {
+			restaurant.replaceWordByCategory(category, wordlist);
+		}
+	}
+	
 	public void saveReviews() throws IOException {
 		for(Restaurant restaurant:restaurants) {
 			restaurant.save("data-preprocessed/");
@@ -91,44 +101,8 @@ public class AspectBasedSentimentAnalysis {
 		}
 	}
 	
-	public void saveNounList() throws IOException {
-		BufferedWriter output = new BufferedWriter(new FileWriter(new File("createdData/nounList")));
-		Set<String> nouns = Review.nounFrequencies.keySet();
-		for(String noun:nouns) {
-			output.write(noun +  "\n");
-		}
-		output.close();
-	}
-	public void replaceFoods(HashSet<String> foods) throws IOException {
-		String newRev = null;
-		for (Restaurant restaurant : restaurants) {
-			for (Review review : restaurant.getReviews()) {
-				String[] reviewSplit = review.toString().split("\\t");
-				String revi = reviewSplit[5];
-				boolean found = false;
-				newRev = review.toString();
-				for (String word : revi.split("\\s")) {
-					if (foods.contains(word) && !word.equals("at") && !word.equals("am") && !word.equals("as")) {
-						System.out.println(word);
-						found = true;
-						newRev = newRev.toString().replaceAll(word, "food");
-					}
-				}
-				if (found == true) {
-					BufferedWriter output = new BufferedWriter(new FileWriter(new File("food/found/" + restaurant.id)));
-					output.write(newRev + "\n");
-					output.close();
-				} else {
-					BufferedWriter output = new BufferedWriter(new FileWriter(new File("food/not_found/"
-							+ restaurant.id)));
-					output.write(review.toString() + "\n");
-					output.close();
-				}
-			}
-		}
-	}
 	
-	private HashSet<String> readCsvFoodList() {
+	private HashSet<String> getFoodList() {
 		HashSet<String> foodList = new HashSet<String>();
 		try {
 			Scanner scanner = new Scanner(new File("cofids.csv"));
@@ -143,7 +117,13 @@ public class AspectBasedSentimentAnalysis {
 
 		} catch (Exception e) {
 		}
+		foodList.remove("at");
+		foodList.remove("as");
+		foodList.remove("am");
 		//custom words
+		foodList.add("food");
+		
+		
 		foodList.add("chicken");
 		foodList.add("corn");
 		foodList.add("nuggets");
@@ -162,6 +142,31 @@ public class AspectBasedSentimentAnalysis {
 		foodList.add("calamari");
 		foodList.add("crab legs");
 		return foodList;
+	}
+	
+	private HashSet<String> getServiceList() {
+		HashSet<String> serviceList = new HashSet<String>();
+		serviceList.add("services");
+		serviceList.add("waiter");
+		serviceList.add("waitress");
+		serviceList.add("server");
+		serviceList.add("bartender");
+		serviceList.add("barkeeper");
+		serviceList.add("barman");
+		serviceList.add("barmaid");
+		serviceList.add("management");
+		return serviceList;
+	}
+	
+	// \d+([\,\.]\d{1,2})?\s*\$
+	private HashSet<String> getPriceValueList() {
+		HashSet<String> priceValueList = new HashSet<String>();
+		priceValueList.add("prices");
+		priceValueList.add("value");
+		priceValueList.add("values");
+		priceValueList.add("cost");
+		priceValueList.add("costs");
+		return priceValueList;
 	}
 }
 

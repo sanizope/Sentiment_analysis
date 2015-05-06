@@ -1,5 +1,8 @@
 package de.uni_mannheim.informatik.dws.web_mining.ffse.analyser;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -10,6 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Map.Entry;
 import java.util.Properties;
 
@@ -181,7 +185,7 @@ public class Review {
 	    		
 	    		
 	    		// track occurrence frequencies of all nouns
-	    		if (isNoun(posTag)){
+	    		if (TaggedSentence.isNoun(posTag)){
 	    			if (Review.nounFrequencies.containsKey(word)){
 	    				Review.nounFrequencies.put(word, Review.nounFrequencies.get(word) + 1);
 	    			}
@@ -201,15 +205,6 @@ public class Review {
 			System.setErr(err); 
 	    	//extractInformation(words, posTags);
 	    }
-	}
-	
-	/**
-	 * returns true if posTag refers to any type of noun, false otherwise
-	 * @param posTag
-	 * @return
-	 */
-	private boolean isNoun(String posTag){
-		return posTag.startsWith("NN");
 	}
 	
 	@Override
@@ -256,6 +251,29 @@ public class Review {
 		}
 	}
 	
+	public String getText() {
+		return text;
+	}
+	
+	public ArrayList<TaggedSentence> getTaggedSentences() {
+		return taggedSentences;
+	}
+	
+	public void replaceWordByCategory(String category, HashSet<String> wordlist)  {
+		for (TaggedSentence sentence : taggedSentences) {
+			for (int wordCounter=0; wordCounter<sentence.words.length; ++wordCounter) {
+				if (wordlist.contains(sentence.words[wordCounter].toLowerCase())) {
+					//System.out.println(word);
+					text = text.replaceAll(sentence.words[wordCounter], category);
+					if(!TaggedSentence.isNoun(sentence.posTags[wordCounter])){
+						System.out.println("Replaced non-noun " + sentence.words[wordCounter]);
+					}
+					sentence.words[wordCounter] = category;
+				}
+			}
+		}
+	}
+	
 	public static void clearNounfrequencies() {
 		HashMap<String, Integer> newNounFrequencies = new HashMap<String, Integer>();
 		for(Entry<String, Integer> entry:nounFrequencies.entrySet()) {
@@ -269,4 +287,12 @@ public class Review {
 		nounFrequencies = newNounFrequencies;
 	}
 
+	public static void saveNounList() throws IOException {
+		BufferedWriter output = new BufferedWriter(new FileWriter(new File("createdData/nounList")));
+		Set<String> nouns = Review.nounFrequencies.keySet();
+		for(String noun:nouns) {
+			output.write(noun +  "\n");
+		}
+		output.close();
+	}
 }

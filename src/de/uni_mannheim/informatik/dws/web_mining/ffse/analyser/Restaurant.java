@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class Restaurant {
@@ -33,6 +34,12 @@ public class Restaurant {
 	
 	public ArrayList<Review> getReviews(){
 		return reviews;
+	}
+	
+	public void replaceWordByCategory(String category, HashSet<String> wordlist){
+		for(Review review:reviews) {
+			review.replaceWordByCategory(category, wordlist);
+		}
 	}
 	
 	public void save(String path) {
