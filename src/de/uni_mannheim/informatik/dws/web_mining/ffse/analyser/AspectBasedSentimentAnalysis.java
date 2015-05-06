@@ -14,7 +14,7 @@ import java.util.Set;
 
 public class AspectBasedSentimentAnalysis {
 	
-	private final static int maxNumberOfReviewsLoaded = 50;
+	private final static int maxNumberOfReviewsLoaded = 7000;
 	ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
 	public static Long activityTime = System.nanoTime();
 
@@ -123,7 +123,6 @@ public class AspectBasedSentimentAnalysis {
 		//custom words
 		foodList.add("food");
 		
-		
 		foodList.add("chicken");
 		foodList.add("corn");
 		foodList.add("nuggets");
@@ -132,15 +131,47 @@ public class AspectBasedSentimentAnalysis {
 		foodList.add("duck");
 		foodList.add("curry");
 		foodList.add("steak");
+		foodList.add("steaks");
 		foodList.add("fish");
 		foodList.add("peppers");
 		foodList.add("food");
+		foodList.add("foods");
 		foodList.add("fries");
 		foodList.add("meal");
+		foodList.add("meals");
 		foodList.add("beans");
 		foodList.add("burger");
+		foodList.add("burgers");
 		foodList.add("calamari");
 		foodList.add("crab legs");
+		foodList.add("shrimp");
+		foodList.add("prime rib");
+		foodList.add("fajitas");
+		foodList.add("wine");
+		foodList.add("dinner");
+		foodList.add("dishes");
+		foodList.add("dish");
+		foodList.add("desserts");
+		foodList.add("dessert");
+		foodList.add("pies");
+		foodList.add("pie");
+		foodList.add("cassoulet");
+		foodList.add("porkchops");
+		foodList.add("porkchop");
+		foodList.add("ribeye");
+		foodList.add("sandwiches");
+		foodList.add("cheddar");
+		foodList.add("appetizer");
+		foodList.add("appetizers");
+		foodList.add("entree");
+		foodList.add("entrees");
+		foodList.add("sausage");
+		foodList.add("sausages");
+		foodList.add("nachos");
+		foodList.add("beers");
+		foodList.add("breakfast");
+		foodList.add("ribs");
+		foodList.add("salads");
 		return foodList;
 	}
 	
@@ -154,6 +185,7 @@ public class AspectBasedSentimentAnalysis {
 		serviceList.add("barkeeper");
 		serviceList.add("barman");
 		serviceList.add("barmaid");
+		serviceList.add("staff");
 		serviceList.add("management");
 		return serviceList;
 	}
@@ -166,6 +198,7 @@ public class AspectBasedSentimentAnalysis {
 		priceValueList.add("values");
 		priceValueList.add("cost");
 		priceValueList.add("costs");
+		priceValueList.add("price");
 		return priceValueList;
 	}
 }
