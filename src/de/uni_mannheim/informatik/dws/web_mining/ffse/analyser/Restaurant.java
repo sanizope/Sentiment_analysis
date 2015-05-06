@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Restaurant {
 	String id = "",
@@ -28,6 +29,10 @@ public class Restaurant {
 		for(Review review:reviews) {
 			review.tagSentences();
 		}
+	}
+	
+	public ArrayList<Review> getReviews(){
+		return reviews;
 	}
 	
 	public void save(String path) {
