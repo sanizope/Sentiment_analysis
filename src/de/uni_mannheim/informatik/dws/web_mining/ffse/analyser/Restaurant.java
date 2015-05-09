@@ -62,6 +62,20 @@ public class Restaurant {
 		}
 	}
 	
+	public void saveText(String path) {
+		try {
+			BufferedWriter output = new BufferedWriter(new FileWriter(new File(path + id)));
+			for (Review review:reviews) {
+				for(TaggedSentence sentence:review.getTaggedSentences()) {
+					output.write(sentence.sentence + "\n");
+				}
+			}
+			output.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void load(String path) {
 		try {
 			BufferedReader input = new BufferedReader(new FileReader(new File(path + id)));

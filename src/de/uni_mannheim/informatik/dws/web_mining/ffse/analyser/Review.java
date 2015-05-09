@@ -251,10 +251,6 @@ public class Review {
 		}
 	}
 	
-	public String getText() {
-		return text;
-	}
-	
 	public ArrayList<TaggedSentence> getTaggedSentences() {
 		return taggedSentences;
 	}

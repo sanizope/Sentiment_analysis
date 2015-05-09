@@ -1,20 +1,17 @@
 package de.uni_mannheim.informatik.dws.web_mining.ffse.analyser;
 
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
 
 
 
 public class AspectBasedSentimentAnalysis {
 	
-	private final static int maxNumberOfReviewsLoaded = 7000;
+	private final static int maxNumberOfReviewsLoaded = 200;
 	ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
 	public static Long activityTime = System.nanoTime();
 
@@ -62,7 +59,8 @@ public class AspectBasedSentimentAnalysis {
 		HashSet<String> priceValue = absa.getPriceValueList();
 		absa.replaceWordByCategoryInReviews("price_value", priceValue);
 		logActivity("replace price/value synonyms with price_value");
-		absa.saveReviews();
+		//absa.saveReviews();
+		absa.saveReviewTexts();
 		System.out.println("Finished");
 
 	}
@@ -92,6 +90,12 @@ public class AspectBasedSentimentAnalysis {
 	public void saveReviews() throws IOException {
 		for(Restaurant restaurant:restaurants) {
 			restaurant.save("data-preprocessed/");
+		}
+	}
+	
+	public void saveReviewTexts() throws IOException {
+		for(Restaurant restaurant:restaurants) {
+			restaurant.saveText("data-preprocessed/");
 		}
 	}
 	
